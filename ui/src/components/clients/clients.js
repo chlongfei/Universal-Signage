@@ -6,11 +6,10 @@ import ClientState, {getClientState} from './client_state';
  * @returns client listing table with control buttons
  */
 export default function Clients(){
-    const [poo, forceUpdate] = useState(x => x + 1, 0)
     return(
         <div id="clients">
             <ClientTable/>
-            <RegisterClient forceUpdate={forceUpdate}/>
+            <RegisterClient/>
         </div>
     )
 }
@@ -19,7 +18,7 @@ export default function Clients(){
  * 
  * @returns button to register new client
  */
-function RegisterClient({forceUpdate}){
+function RegisterClient(){
     const [frmFriendly, setFriendly] = useState("");
     const [frmHostname, setHostname] = useState("");
     const [frmDomain, setDomain] = useState("");
@@ -292,7 +291,7 @@ function ClientDetails({cli_id}){
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-danger btn-sm me-auto" data-bs-dismiss="modal">Delete</button>
                     <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary btn-sm">Save changes</button>
+                    <button type="button" class="btn btn-primary btn-sm" onClick={()=>editClient(cli_id, detailFriendly, detailHostname, detailDomain, detailCampus, detailBlg, detailRm, detailTemp)}>Save changes</button>
                 </div>
                 </div>
             </div>
@@ -302,15 +301,15 @@ function ClientDetails({cli_id}){
 }
 
 
-function editClient(friendly, hostname, domain, campus, blg, rm, template){
-    let api = "http://"+process.env.REACT_APP_API_URL +":"+ process.env.REACT_APP_API_PT+"/a/cli/r/"+friendly+"/"+hostname+"/"+domain+"/"+campus+"/"+blg+"/"+rm+"/"+template;
+function editClient(id, friendly, hostname, domain, campus, blg, rm, template){
+    let api = "http://"+process.env.REACT_APP_API_URL +":"+ process.env.REACT_APP_API_PT+"/a/cli/u/"+id+"/"+friendly+"/"+hostname+"/"+domain+"/"+campus+"/"+blg+"/"+rm+"/"+template;
     fetch(api,{
         headers:{
             "Access-Control-Allow-Origin":process.env.REACT_APP_API_URL
         }
     })
     .then(response=>{
-        console.log(response)
+        console.log(response);
         if(response.status === 200){
             window.location.reload();                
         }else{

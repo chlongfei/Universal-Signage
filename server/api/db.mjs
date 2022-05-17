@@ -79,8 +79,8 @@ export async function dbRegisterClient(friendly, hostname, domain, campus, build
  * @param {*} template_id assigned client id
  * @returns 
  */
- export async function dbUpdateClient(friendly, hostname, domain, campus, building, room, template_id){
-    let query = "INSERT INTO clients (friendly, hostname, domain, campus, building, room, template_id) VALUES (\"" + friendly +"\",\""+ hostname +"\",\""+ domain +"\",\""+ campus +"\",\""+ building +"\",\""+ room +"\","+ template_id + ")";
+ export async function dbUpdateClient(id,friendly, hostname, domain, campus, building, room, template_id){
+    let query = "UPDATE clients SET friendly = \""+friendly+"\", hostname = \""+hostname+"\", domain = \""+domain+"\", campus = \""+campus+"\", building = \""+building+"\", room = \""+room+"\", template_id = \""+template_id+"\" WHERE cli_id = "+ id;
     return dbQuery(query);
 }
 

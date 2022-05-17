@@ -4,7 +4,7 @@ import express from 'express';
 import path from 'path';
 import cors from 'cors';
 
-import { dbQueryAllClients, dbQueryAllTemplates, dbQueryClientDetail, dbRegisterClient} from './api/db.mjs';
+import { dbQueryAllClients, dbQueryAllTemplates, dbQueryClientDetail, dbRegisterClient, dbUpdateClient} from './api/db.mjs';
 import { checkClientStatus } from './api/clients.mjs';
 
 const app = express();
@@ -66,13 +66,14 @@ app.get('/a/cli/g/:cli_id', (req, res)=>{
 /**
  * returns detailed information of registered client
  */
- app.get('/a/cli/u/:friendly/:hostname/:domain/:campus/:building/:room/:template_id', (req, res)=>{
-    console.log("API: received detail req for client " + req.params.hostname + "." + req.params.domain);
-    dbQueryClientDetail(req.params.hostname,req.params.domain)
+ app.get('/a/cli/u/:id/:friendly/:hostname/:domain/:campus/:building/:room/:template_id', (req, res)=>{
+    console.log("API: received detail update for client with id " + req.params.id);
+    dbUpdateClient(req.params.id, req.params.friendly, req.params.hostname,  req.params.domain, req.params.campus, req.params.building, req.params.room, req.params.template_id)
     .then(data=>{
-        console.log(data);
-        res.status(200).send(data);
+        console.log("API: successfully updated client " + req.params.id);
+        res.status(200);
     }).catch(error=>{
+        console.log(error);
         res.status(500).send(error);
     })
 })
